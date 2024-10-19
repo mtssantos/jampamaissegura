@@ -1,20 +1,46 @@
+import React, { useState, useEffect } from 'react';
+import * as Font from 'expo-font';
+import * as SplashScreen from 'expo-splash-screen';
+import { Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold, Poppins_700Bold } from '@expo-google-fonts/poppins';
+import AppNavigator from './src/routes/AppNavigation';
+import { AuthProvider } from './src/context/AuthContext';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+
+
+SplashScreen.preventAutoHideAsync();
+
 
 export default function App() {
+  const [fontsLoaded, setFontsLoaded] = useState(false);
+
+  useEffect(() => {
+    const loadResources = async () => {
+      try {
+        await Font.loadAsync({
+          Poppins_400Regular,
+          Poppins_500Medium,
+          Poppins_600SemiBold,
+          Poppins_700Bold,
+        });
+        setFontsLoaded(true);
+      } catch (e) {
+        console.warn(e);
+      } finally {
+        SplashScreen.hideAsync();
+      }
+    };
+
+    loadResources();
+  }, []);
+
+  if (!fontsLoaded) {
+    return null;
+  }
+
   return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <AuthProvider>
+      <StatusBar backgroundColor='#0A102D' style='light' />
+      <AppNavigator />
+    </AuthProvider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
