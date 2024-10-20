@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import * as Font from 'expo-font';
+import Icon from 'react-native-vector-icons/Ionicons';
 import * as SplashScreen from 'expo-splash-screen';
 import { Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold, Poppins_700Bold } from '@expo-google-fonts/poppins';
 import AppNavigator from './src/routes/AppNavigation';
@@ -23,6 +24,7 @@ export default function App() {
           Poppins_700Bold,
         });
         setFontsLoaded(true);
+        Icon.loadFont();
       } catch (e) {
         console.warn(e);
       } finally {

@@ -23,3 +23,12 @@ export const Separator = styled.View`
   height: 1px;
   background-color: #fff;
 `;
+
+export const OptionsContainer = styled.View`
+  padding: 20px 0px 10px 0px;
+
+`;
+
+
+
+
