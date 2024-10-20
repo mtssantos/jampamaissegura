@@ -75,7 +75,7 @@ const NewReport = () => {
         termsAccepted: isChecked
       });
 
-      navigation.navigate("Home");
+      navigation.navigate("ConfirmReport");
     };
 
     return(

@@ -5,6 +5,7 @@ import { useAuth } from '../context/AuthContext';
 import AuthRoutes from './auth.routes';
 import { TabRoutes } from './app.tab.routes';
 import NewReport from '../screens/NewReport';
+import ConfirmReport from '../screens/ConfirmReport';
 
 const RootStack = createNativeStackNavigator();
 
@@ -18,6 +19,7 @@ const AppNavigator = () => {
                     <>
                         <RootStack.Screen name="Main" component={TabRoutes} options={{ headerShown: false }} />
                         <RootStack.Screen name="NewReport" component={NewReport} options={{ headerShown: false }} />
+                        <RootStack.Screen name="ConfirmReport" component={ConfirmReport} options={{ headerShown: false }} />
                     </>
                 ) : (
                         <RootStack.Screen name="Auth" component={AuthRoutes} options={{ headerShown: false }} />
