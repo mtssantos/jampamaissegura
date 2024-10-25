@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Container, DateInput, FormContainer, Header, Label, Select, Separator, SubmitButton, TextArea, TimeInput, TimeRow, Title, TextSubmit, DateButton, ButtonText, TimeContainer, TimeButton, TimePickerContainer, DatePickerContainer, MapContainer, CheckBoxContainer, CheckBoxLabel, CustomCheckbox, CheckboxText } from "./styles";
+import { Container, FormContainer, Header, Label, Select, Separator, SubmitButton, TextArea, Title, TextSubmit, DateButton, ButtonText, TimeButton, MapContainer, CheckBoxContainer, CheckBoxLabel, CustomCheckbox, CheckboxText, DateTimePickerContainer, DatePickerContainer, TimePickerContainer, Input } from "./styles";
 import { Picker } from "@react-native-picker/picker";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { Alert, Platform } from "react-native";
@@ -10,15 +10,16 @@ import { useNavigation } from "@react-navigation/native";
 
 const NewReport = () => {
     const navigation = useNavigation<any>();
-    const [occurrenceType, setOccurrenceType] = useState('theft');
+    const [occurrenceType, setOccurrenceType] = useState('Roubo');
     const [details, setDetails] = useState('');
+    const [vehicle, setVehicle] = useState('');
+    const [weapon, setWeapon] = useState('');
+    const [individuals, setIndividuals] = useState('');
     const [date, setDate] = useState(new Date());
     const [showDatePicker, setShowDatePicker] = useState(false);
-    const [startTime, setStartTime] = useState(new Date());
-    const [endTime, setEndTime] = useState(new Date());
+    const [time, setTime] = useState(new Date());
 
-    const [showStartTimePicker, setShowStartTimePicker] = useState(false);
-    const [showEndTimePicker, setShowEndTimePicker] = useState(false);
+    const [showTimePicker, setShowTimePicker] = useState(false);
     const [region, setRegion] = useState({
         latitude: -7.11532,
         longitude: -34.861,
@@ -52,26 +53,36 @@ const NewReport = () => {
     };
     
 
-    const onChangeStartTime = (event, selectedTime) => {
-        const currentTime = selectedTime || startTime;
-        setShowStartTimePicker(Platform.OS === 'ios');
-        setStartTime(currentTime);
-      };
-    
-      const onChangeEndTime = (event, selectedTime) => {
-        const currentTime = selectedTime || endTime;
-        setShowEndTimePicker(Platform.OS === 'ios');
-        setEndTime(currentTime);
-      };
+    const onChangeTime = (event, selectedTime) => {
+        const currentTime = selectedTime || time;
+        setShowTimePicker(Platform.OS === 'ios');
+        setTime(currentTime);
+    };
+
+    const formatDateTime = (date: Date, time: Date) => {
+        const datePart = date.toISOString().split('T')[0];
+
+        const timePart = time.toTimeString().split(' ')[0];
+
+        return{
+            dateInfo: datePart,
+            timeInfo: timePart
+        }
+    }
+
+    const { dateInfo, timeInfo } = formatDateTime(date, time);
   
     const handleSubmit = () => {
       console.log({
-        occurrenceType,
-        details,
-        date,
-        startTime,
-        endTime,
-        location: region,
+        "crime_type": occurrenceType,
+        "observations": details,
+        "date": dateInfo,
+        "time": timeInfo,
+        "vehicle_description": vehicle,
+        "weapon_type": weapon,
+        "number_of_individuals": individuals,
+        latitude: region.latitude,
+        longitude: region.longitude,
         termsAccepted: isChecked
       });
 
@@ -114,66 +125,68 @@ const NewReport = () => {
                 <TextArea
                     multiline
                     numberOfLines={5}
-                    placeholder="Descreva os detalhes da ocorrência"
+                    placeholder="Descreva os detalhes da ocorrência..."
                     value={details}
                     onChangeText={(text) => setDetails(text)}
-                    placeholderTextColor="#fff"
+                    placeholderTextColor="#b4b4b4"
                 />
 
-                <Label>Informe a data do Ocorrido:</Label>
-                <DateButton onPress={() => setShowDatePicker(true)}>
-                    <ButtonText>{date.toLocaleDateString()}</ButtonText>
-                </DateButton>
-                <DatePickerContainer>
-                    {showDatePicker && (
-                        <DateTimePicker
-                            value={date}
-                            mode="date"
-                            display="default"
-                            locale="pt-BR"
-                            onChange={onChangeDate}
-                            themeVariant="dark"
-                        />
-                    )}
-                </DatePickerContainer>
+                <Label>Informe o tipo de veículo utilizado:</Label>
+                <Input placeholder="Descreva como foi a locomoção dos indivíduos..." 
+                    value={vehicle} 
+                    placeholderTextColor={"#b4b4b4"} 
+                    onChangeText={(text) => setVehicle(text)}
+                />
 
-                <Label>Informe o horário de início e término:</Label>
+                <Label>Qual foi o tipo de arma utilizado:</Label>
+                <Input placeholder="Descreva o tipo de arma utilizado..." 
+                    value={weapon} 
+                    placeholderTextColor={"#b4b4b4"} 
+                    onChangeText={(text) => setWeapon(text)}
+                />
 
-                <TimeContainer> 
-                    <TimeButton onPress={() => setShowStartTimePicker(true)}>
-                        <ButtonText>{`${startTime.getHours()}:${(startTime.getMinutes() < 10 ? '0' : '') + startTime.getMinutes()}`}</ButtonText>
-                    </TimeButton>
+                <Label>Informe a quantidade de indivíduos</Label>
+                <Input placeholder="Descreva quantos indivíduos tinha na ocorrência..." 
+                    value={individuals} 
+                    placeholderTextColor={"#b4b4b4"} 
+                    onChangeText={(text) => setIndividuals(text)}
+                />
 
-
-                    <TimeButton onPress={() => setShowEndTimePicker(true)}>
-                        <ButtonText>{`${endTime.getHours()}:${(endTime.getMinutes() < 10 ? '0' : '') + endTime.getMinutes()}`}</ButtonText>
-                    </TimeButton>
-                </TimeContainer>
-                <TimePickerContainer>
-                    {showStartTimePicker && (
+                <Label>Informe a data e hora do Ocorrido:</Label>
+                <DateTimePickerContainer>
+                    <DateButton onPress={() => setShowDatePicker(true)}>
+                        <ButtonText>{date.toLocaleDateString()}</ButtonText>
+                    </DateButton>
+                    <DatePickerContainer>
+                        {showDatePicker && (
                             <DateTimePicker
-                                value={startTime}
-                                mode="time"
+                                value={date}
+                                mode="date"
                                 display="default"
-                                onChange={onChangeStartTime}
-                                is24Hour={true}
+                                locale="pt-BR"
+                                onChange={onChangeDate}
                                 themeVariant="dark"
-                                textColor="white"
                             />
-                    )}
+                        )}
+                    </DatePickerContainer>
+                    <TimeButton onPress={() => setShowTimePicker(true)}>
+                        <ButtonText>{`${time.getHours()}:${(time.getMinutes() < 10 ? '0' : '') + time.getMinutes()}`}</ButtonText>
+                    </TimeButton>
+                    <TimePickerContainer>
+                        {showTimePicker && (
+                                <DateTimePicker
+                                    value={time}
+                                    mode="time"
+                                    display="default"
+                                    onChange={onChangeTime}
+                                    is24Hour={true}
+                                    themeVariant="dark"
+                                    textColor="white"
+                                />
+                        )}
+                    </TimePickerContainer>
+                </DateTimePickerContainer>
 
-                    {showEndTimePicker && (
-                        <DateTimePicker
-                            value={endTime}
-                            mode="time"
-                            display="default"
-                            onChange={onChangeEndTime}
-                            is24Hour={true}
-                            themeVariant="dark"
-                            textColor="white"
-                        />
-                    )}
-                </TimePickerContainer>
                 <Label>Selecione o local da ocorrência no mapa:</Label>
                 <MapContainer>
                     <MapView

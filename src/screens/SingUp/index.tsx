@@ -10,7 +10,6 @@ const schema = Yup.object().shape({
     cpf: Yup.string()
       .matches(/^\d{3}\.\d{3}\.\d{3}-\d{2}$/, 'CPF inválido')
       .required('O CPF é obrigatório'),
-    crea: Yup.string().required('O CREA é obrigatório'),
     telefone: Yup.string().required('O telefone é obrigatório'),
     senha: Yup.string()
       .min(6, 'A senha deve ter pelo menos 6 caracteres')

@@ -54,33 +54,18 @@ export const TextArea = styled.TextInput`
   text-align-vertical: top;
 `;
 
-export const DateInput = styled.TextInput`
-  height: 50px;
-  border-width: 1px;
-  border-color: #fff;
-  border-radius: 5px;
+export const Input = styled.TextInput`
+  border: 1px solid #fff;
+  font-size: 15px;
   padding: 10px;
-  margin-bottom: 16px;
-`;
-
-export const TimeRow = styled.View`
-  flex-direction: row;
-  justify-content: space-between;
-  margin-bottom: 16px;
-`;
-
-export const TimeInput = styled.TextInput`
-  height: 50px;
-  border-width: 1px;
-  border-color: #fff;
+  margin-bottom: 13px;
   border-radius: 5px;
-  padding: 10px;
-  width: 48%;
+  color: #fff;
 `;
-
 
 export const DateButton = styled.TouchableOpacity`
   height: 50px;
+  width: 50%;
   padding: 10px;
   background-color: #0A102D;
   border-radius: 5px;
@@ -94,6 +79,7 @@ export const DateButton = styled.TouchableOpacity`
 export const TimeButton = styled.TouchableOpacity`
   flex: 0.48;
   height: 50px;
+  width: 50%;
   padding: 10px;
   background-color: #0A102D;
   border-radius: 5px;
@@ -109,23 +95,22 @@ export const ButtonText = styled.Text`
   font-size: 15px;
 `;
 
-export const TimeContainer = styled.View`
-    flex-direction: row;
-    justify-content: space-between;
+export const DateTimePickerContainer = styled.View`
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 10px 0;
 `;
 
 export const DatePickerContainer = styled.View`
-        flex-direction: row;
-        justify-content: center;
-        padding: 10px 0px 10px 0px;
+  flex-direction: row;
+  justify-content: center;
 `;
 
 export const TimePickerContainer = styled.View`
-        flex-direction: row;
-        justify-content: space-around;
-        padding: 10px 0px 10px 0px;
-
+  flex-direction: row;
+  justify-content: center;
 `;
+
 
 export const MapContainer = styled.View`
   height: 200px;
