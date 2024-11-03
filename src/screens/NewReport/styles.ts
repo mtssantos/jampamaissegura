@@ -79,7 +79,6 @@ export const DateButton = styled.TouchableOpacity`
 export const TimeButton = styled.TouchableOpacity`
   flex: 0.48;
   height: 50px;
-  width: 50%;
   padding: 10px;
   background-color: #0A102D;
   border-radius: 5px;

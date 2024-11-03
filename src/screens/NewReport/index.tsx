@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Container, FormContainer, Header, Label, Select, Separator, SubmitButton, TextArea, Title, TextSubmit, DateButton, ButtonText, TimeButton, MapContainer, CheckBoxContainer, CheckBoxLabel, CustomCheckbox, CheckboxText, DateTimePickerContainer, DatePickerContainer, TimePickerContainer, Input } from "./styles";
 import { Picker } from "@react-native-picker/picker";
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { Alert, Platform } from "react-native";
+import { Alert, Platform, TouchableOpacity } from "react-native";
 import MapView, { Marker } from 'react-native-maps';
 import * as Location from 'expo-location';
 import Checkbox from "expo-checkbox";
@@ -125,7 +125,7 @@ const NewReport = () => {
                 <TextArea
                     multiline
                     numberOfLines={5}
-                    placeholder="Descreva os detalhes da ocorrência..."
+                    placeholder="Descreva o que aconteceu na ocorrência..."
                     value={details}
                     onChangeText={(text) => setDetails(text)}
                     placeholderTextColor="#b4b4b4"
@@ -145,7 +145,7 @@ const NewReport = () => {
                     onChangeText={(text) => setWeapon(text)}
                 />
 
-                <Label>Informe a quantidade de indivíduos</Label>
+                <Label>Informe a quantidade de indivíduos:</Label>
                 <Input placeholder="Descreva quantos indivíduos tinha na ocorrência..." 
                     value={individuals} 
                     placeholderTextColor={"#b4b4b4"} 
@@ -193,6 +193,9 @@ const NewReport = () => {
                         style={{ width: '100%', height: 200 }}
                         region={region}
                         onRegionChangeComplete={(newRegion) => setRegion(newRegion)}
+                        zoomControlEnabled
+                        showsUserLocation
+                        showsMyLocationButton
                         onPress={(e) => {
                             const { latitude, longitude } = e.nativeEvent.coordinate;
                             setRegion({ ...region, latitude, longitude });
@@ -203,6 +206,7 @@ const NewReport = () => {
                 </MapContainer>
 
                 <Label>Você leu e concorda com os termos de responsabilidade e confidencialidade:</Label>
+                <TouchableOpacity onPress={() => setIsChecked(!isChecked)}>
                 <CheckBoxContainer>
                     <Checkbox
                         value={isChecked}
@@ -210,6 +214,7 @@ const NewReport = () => {
                     />
                     <CheckBoxLabel>Eu li e aceito os termos</CheckBoxLabel>
                 </CheckBoxContainer>
+                </TouchableOpacity>
 
                 <SubmitButton
                     onPress={handleSubmit}

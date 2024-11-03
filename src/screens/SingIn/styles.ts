@@ -22,8 +22,8 @@ export const LogoText = styled.Text`
 `;
 
 export const LogoImage = styled.Image`
-  width: 300px;
-  height: 300px;
+  width: 250px;
+  height: 250px;
   resize-mode: contain;
 `;
 
