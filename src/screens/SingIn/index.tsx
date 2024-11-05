@@ -1,11 +1,16 @@
-import React from "react";
-import { Container, Input, Button, ButtonText, Label, ForgotPasswordText, LogoContainer, LogoText, LogoImage, SingUpText, Footer } from "./styles";
+import React, { useState } from "react";
+import { Container, Input, Button, ButtonText, Label, ForgotPasswordText, LogoContainer, LogoText, LogoImage, SingUpText, Footer, ErrorText } from "./styles";
 import { logoImage } from '../../assets/';
 import { useNavigation } from '@react-navigation/native';
 import { useAuth } from "../../context/AuthContext";
+import { authLogin } from '../../services/api/authService';
+import { Alert } from "react-native";
 
 
 const SingIn = () => {
+    const [cpf, setCPF] = useState('');
+    const [password, setPassword] = useState('');
+    const [errorMessage, setErrorMessage] = useState('');
     const navigation = useNavigation<any>();
     
     const { login } = useAuth();
@@ -18,9 +23,14 @@ const SingIn = () => {
         navigation.navigate('SingUp');
     }
 
-    const handleLogin = () => {
-        navigation.navigate('AuthHome');
-        login();
+    const handleLogin = async () => {
+        const response = await authLogin({ cpf, password }); 
+        if (response.success){
+            navigation.navigate('AuthHome');
+            login();
+        } else {
+            Alert.alert('Erro', 'Usuário ou senha inválidos.');
+        }
     }
 
     return(
@@ -28,10 +38,13 @@ const SingIn = () => {
             <LogoContainer>
                 <LogoImage source={logoImage} />
             </LogoContainer>
-            <Label>Email</Label>
+
+            <Label>CPF</Label>
             <Input
-                placeholder="Digite seu e-mail"
-                keyboardType="email-address"
+                placeholder="Digite seu CPF"
+                value={cpf}
+                onChangeText={setCPF}
+                keyboardType="numeric"
                 autoCapitalize="none"
                 placeholderTextColor={"#fff"}
                 autoCorrect={false}
@@ -41,12 +54,16 @@ const SingIn = () => {
             <Input
                 placeholder="Digite sua senha"
                 placeholderTextColor={"#fff"}
+                value={password}
+                onChangeText={setPassword}
                 secureTextEntry
             />
+            
             <ForgotPasswordText onPress={handleForgotPasswordPress}>
                 Esqueceu a sua senha?
             </ForgotPasswordText>
 
+            {errorMessage ? <ErrorText>{errorMessage}</ErrorText> : null}
             <Button onPress={handleLogin}>
                 <ButtonText>Fazer Login</ButtonText>
             </Button>

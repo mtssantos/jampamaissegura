@@ -10,8 +10,11 @@ export const Container = styled.View`
 
 export const Header = styled.View`
   flex-direction: row;
-  justify-content: space-between;
   align-items: center;
+`;
+
+export const BackButton = styled(TouchableOpacity)`
+  margin: 0px 6px 5px 0px;
 `;
 
 

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Container, FormContainer, Header, Label, Select, Separator, SubmitButton, TextArea, Title, TextSubmit, DateButton, ButtonText, TimeButton, MapContainer, CheckBoxContainer, CheckBoxLabel, CustomCheckbox, CheckboxText, DateTimePickerContainer, DatePickerContainer, TimePickerContainer, Input } from "./styles";
+import { Container, FormContainer, Header, Label, Select, Separator, SubmitButton, TextArea, Title, TextSubmit, DateButton, ButtonText, TimeButton, MapContainer, CheckBoxContainer, CheckBoxLabel, CustomCheckbox, CheckboxText, DateTimePickerContainer, DatePickerContainer, TimePickerContainer, Input, BackButton } from "./styles";
 import { Picker } from "@react-native-picker/picker";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { Alert, Platform, TouchableOpacity } from "react-native";
@@ -7,6 +7,7 @@ import MapView, { Marker } from 'react-native-maps';
 import * as Location from 'expo-location';
 import Checkbox from "expo-checkbox";
 import { useNavigation } from "@react-navigation/native";
+import IconWrapper from "../../components/IconWrapper";
 
 const NewReport = () => {
     const navigation = useNavigation<any>();
@@ -71,6 +72,10 @@ const NewReport = () => {
     }
 
     const { dateInfo, timeInfo } = formatDateTime(date, time);
+
+    const handleGoBack = () => {
+        navigation.goBack();
+    };
   
     const handleSubmit = () => {
       console.log({
@@ -92,6 +97,9 @@ const NewReport = () => {
     return(
         <Container>
             <Header>
+                <BackButton onPress={handleGoBack}>
+                    <IconWrapper iconName="arrow-back-outline" size={24} color="#fff" />
+                </BackButton>
                 <Title>Registrar Ocorrência</Title>
             </Header>
             <Separator />
@@ -205,7 +213,7 @@ const NewReport = () => {
                     </MapView>
                 </MapContainer>
 
-                <Label>Você leu e concorda com os termos de responsabilidade e confidencialidade:</Label>
+                <Label>Declaro que li o termo de responsabilidade e confidencialidade estabelecidos.</Label>
                 <TouchableOpacity onPress={() => setIsChecked(!isChecked)}>
                 <CheckBoxContainer>
                     <Checkbox

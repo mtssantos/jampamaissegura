@@ -1,8 +1,13 @@
 import React from "react";
-import { Container, ErrorText, FormContainer, Header, Input, Label, Separator, SubmitButton, SubmitText, Title } from "./styles";
+import { Container, ErrorText, ExitButton, Footer, FormContainer, Header, Input, Label, Separator, SubmitButton, SubmitText, Title } from "./styles";
 import { useForm, Controller } from 'react-hook-form';
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { Alert } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import { createUser } from "../../services/api/userService";
+import IconWrapper from "../../components/IconWrapper";
+import { ObrigatoryText } from "./styles";
 
 const schema = Yup.object().shape({
     nome: Yup.string().required('O nome é obrigatório'),
@@ -10,14 +15,23 @@ const schema = Yup.object().shape({
     cpf: Yup.string()
       .matches(/^\d{3}\.\d{3}\.\d{3}-\d{2}$/, 'CPF inválido')
       .required('O CPF é obrigatório'),
-    telefone: Yup.string().required('O telefone é obrigatório'),
-    senha: Yup.string()
+    phone: Yup.string().required('O telefone é obrigatório'),
+    password: Yup.string()
+      .min(6, 'A senha deve ter pelo menos 6 caracteres')
+      .required('A senha é obrigatória'),
+    password_confirmation: Yup.string()
       .min(6, 'A senha deve ter pelo menos 6 caracteres')
       .required('A senha é obrigatória'),
 });
 
 
 const SingUp = () => {
+    const navigation = useNavigation<any>();
+
+    const handleGoBack = () => {
+        navigation.goBack();
+    };
+
     const {
         control,
         handleSubmit,
@@ -25,10 +39,34 @@ const SingUp = () => {
     } = useForm({
         resolver: yupResolver(schema),
     });
-    
-    const onSubmit = (data: any) => {
-        console.log(data);
+   
+    const onSubmit = async (data: any) => {
+        const { nome, cpf, phone, password, password_confirmation } = data;
+
+        const response = await createUser({
+            nome,
+            cpf,
+            phone,
+            password,
+            confirmPassword: password_confirmation 
+        });
+
+        if (response.success) {
+            Alert.alert(
+                'Usuário criado com sucesso!',
+                'Agora você pode fazer login com suas credenciais.',
+                [
+                    {
+                        text: 'OK',
+                        onPress: () => navigation.navigate('SingIn'),
+                    },
+                ]
+            );
+        } else {
+            Alert.alert('Erro', 'Não foi possível criar o usuário. Tente novamente.');
+        }
     };
+
 
 
     return(
@@ -39,7 +77,7 @@ const SingUp = () => {
             <Separator />
 
             <FormContainer>
-                <Label>Nome:</Label>
+                <Label>Nome: <ObrigatoryText>*</ObrigatoryText></Label>
                 <Controller
                     control={control}
                     name="nome"
@@ -51,19 +89,7 @@ const SingUp = () => {
                     )}
                 />
 
-                <Label>Email:</Label>
-                <Controller
-                    control={control}
-                    name="email"
-                    render={({ field: { onChange, value } }) => (
-                    <>
-                        <Input placeholder="Digite seu email" value={value} placeholderTextColor={"#fff"} onChangeText={onChange} />
-                        {errors.email && <ErrorText>{errors.email.message}</ErrorText>}
-                    </>
-                    )}
-                />
-
-                <Label>CPF:</Label>
+                <Label>CPF: <ObrigatoryText>*</ObrigatoryText></Label>
                 <Controller
                     control={control}
                     name="cpf"
@@ -75,34 +101,54 @@ const SingUp = () => {
                     )}
                 />
 
-                <Label>Telefone:</Label>
+                <Label>Telefone: <ObrigatoryText>*</ObrigatoryText></Label>
                 <Controller
                     control={control}
-                    name="telefone"
+                    name="phone"
                     render={({ field: { onChange, value } }) => (
                     <>
                         <Input placeholder="Digite seu telefone" placeholderTextColor={"#fff"} value={value} onChangeText={onChange} />
-                        {errors.telefone && <ErrorText>{errors.telefone.message}</ErrorText>}
+                        {errors.phone && <ErrorText>{errors.phone.message}</ErrorText>}
                     </>
                     )}
                 />
 
-                <Label>Senha:</Label>
+                <Label>Senha: <ObrigatoryText>*</ObrigatoryText></Label>
                 <Controller
                     control={control}
-                    name="senha"
+                    name="password"
                     render={({ field: { onChange, value } }) => (
                     <>
                         <Input placeholder="Digite sua senha" secureTextEntry value={value} placeholderTextColor={"#fff"} onChangeText={onChange} />
-                        {errors.senha && <ErrorText>{errors.senha.message}</ErrorText>}
+                        {errors.password && <ErrorText>{errors.password.message}</ErrorText>}
                     </>
                     )}
                 />
-
-                <SubmitButton onPress={handleSubmit(onSubmit)}>
-                    <SubmitText>Enviar</SubmitText>
-                </SubmitButton>
+                                
+                <Label>Confirmar Senha: <ObrigatoryText>*</ObrigatoryText></Label>
+                <Controller
+                    control={control}
+                    name="password_confirmation"
+                    render={({ field: { onChange, value } }) => (
+                    <>
+                        <Input placeholder="Digite sua senha" secureTextEntry value={value} placeholderTextColor={"#fff"} onChangeText={onChange} />
+                        {errors.password_confirmation && <ErrorText>{errors.password_confirmation.message}</ErrorText>}
+                    </>
+                    )}
+                />
                 </FormContainer>
+                <Footer>
+                    <ObrigatoryText>
+                        * Campos Obrigatórios
+                    </ObrigatoryText>
+                    <SubmitButton onPress={handleSubmit(onSubmit)}>
+                        <SubmitText>Enviar</SubmitText>
+                    </SubmitButton>
+                    <ExitButton onPress={handleGoBack}>
+                        Cancelar
+                    </ExitButton>
+                </Footer>
+            
         </Container>
     );
 }

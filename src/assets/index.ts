@@ -1,1 +1,1 @@
-export const logoImage: number = require('./Logo.png');
+export const logoImage: number = require('./logo.png');

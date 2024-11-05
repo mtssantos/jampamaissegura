@@ -42,6 +42,7 @@ export const Input = styled.TextInput`
   background-color: #0A102D;
   color: #fff;
   border-radius: 4px;
+  border: 1px solid #fff;
   padding: 10px 20px;
   margin-bottom: 20px;
 `;
@@ -81,4 +82,10 @@ export const SingUpText = styled.Text`
   font-size: 16px;
   text-align: center;
   text-decoration: underline;
+`;
+
+export const ErrorText = styled.Text`
+  color: #E82C2C;
+  font-size: 16px;
+  text-align: center;
 `;

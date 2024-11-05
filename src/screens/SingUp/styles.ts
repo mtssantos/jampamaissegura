@@ -1,6 +1,7 @@
 import styled from 'styled-components/native';
 import { MaterialIcons } from '@expo/vector-icons';
 
+
 export const Container = styled.View`
   flex: 1;
   padding: 50px 15px 0px 15px;
@@ -9,10 +10,8 @@ export const Container = styled.View`
 
 export const Header = styled.View`
   flex-direction: row;
-  justify-content: space-between;
   align-items: center;
 `;
-
 
 export const Title = styled.Text`
   font-size: 20px;
@@ -38,6 +37,7 @@ export const Input = styled.TextInput`
   font-size: 15px;
   padding: 10px;
   margin-bottom: 13px;
+  color: #fff;
   border-radius: 5px;
 `;
 
@@ -70,4 +70,24 @@ export const SubmitText = styled.Text`
   text-align: center;
   font-weight: bold;
   font-family: 'Poppins_700Bold';  
+`;
+
+export const Footer = styled.View`
+  flex: 1;
+  justify-content: flex-end;
+  background-color: #0A102D;
+`;
+
+export const ObrigatoryText = styled.Text`
+  color: #d00000;
+  text-align: right;
+  font-size: 15px;
+`;
+
+export const ExitButton = styled.Text`
+  color: #fff;
+  font-size: 16px;
+  margin: 15px 0px 30px 0px;
+  text-align: center;
+  text-decoration: underline;
 `;
